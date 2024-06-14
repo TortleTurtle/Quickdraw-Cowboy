@@ -8,6 +8,11 @@ export default class HandPoseDetector {
         this.canvasCtx = canvasElement.getContext("2d");
         this.drawingUtils = new DrawingUtils(this.canvasCtx);
         this.handLandmarker = null;
+        this.gestures = {
+            holstered: [],
+            drawn: [],
+            fired: []
+        }
     }
 
     async loadHandLandmarker() {
@@ -33,6 +38,7 @@ export default class HandPoseDetector {
         //start detection
         const startTimeMs = performance.now();
         this.results = this.handLandmarker.detectForVideo(this.videoElement, startTimeMs);
+        console.log(this.results);
 
         this.drawCanvas();
 
@@ -58,4 +64,33 @@ export default class HandPoseDetector {
         }
     }
 
+    recordGesture(gestureType) {
+        console.log(`Now recording: ${gestureType}`);
+
+        //If 100 landmarks are recorded quit the function.
+        if (this.gestures[gestureType].length >= 100) {
+            console.log(`Finished recording: ${gestureType}`);
+            return
+        }
+
+        if (this.results && this.results.landmarks && this.results.landmarks.length > 0) {
+            this.results.landmarks.forEach((landmark, index) => {
+                if (this.results.handedness[index] !== "Right") return;
+                this.gestures[gestureType].push(landmark);
+            });
+        }
+
+        //recursively call the function.
+        setTimeout(() => this.recordGesture(gestureType), 200);
+    }
+
+    downloadGestures() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.gestures, null, 2));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "gestures.json");
+        document.body.appendChild(downloadAnchorNode); // Required for Firefox
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    }
 }

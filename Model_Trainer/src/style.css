@@ -8,3 +8,8 @@ video, canvas {
 canvas {
     z-index: 99;
 }
+.buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}

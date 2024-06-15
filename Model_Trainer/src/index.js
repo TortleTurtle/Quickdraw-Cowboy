@@ -1,6 +1,7 @@
 import {DrawingUtils, FilesetResolver, HandLandmarker} from "@mediapipe/tasks-vision";
 import HandPoseDetector from "./HandPoseDetector";
 import './style.css'
+import ModelTrainer from "./ModelTrainer";
 
 const videoElement = document.getElementById('inputVideo');
 const canvasElement = document.getElementById("outputCanvas");
@@ -24,6 +25,8 @@ async function connectWebcam(){
 async function main() {
 
     const handPoseDetector = new HandPoseDetector(videoElement, canvasElement);
+    const modelTrainer = new ModelTrainer();
+
     await handPoseDetector.loadHandLandmarker();
     await connectWebcam();
     //start prediction;
@@ -40,6 +43,9 @@ async function main() {
     document.getElementById("download").addEventListener("click", () => {
         handPoseDetector.downloadGestures();
     });
+    document.getElementById("loadData").addEventListener("click", () => {
+        modelTrainer.loadTrainingData();
+    })
 }
 
 main();

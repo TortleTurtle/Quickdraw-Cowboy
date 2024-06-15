@@ -28,6 +28,18 @@ async function main() {
     await connectWebcam();
     //start prediction;
     handPoseDetector.startPredicting();
+    document.getElementById("recordHolstered").addEventListener("click", () => {
+        handPoseDetector.recordGesture("holstered");
+    });
+    document.getElementById("recordDrawn").addEventListener("click", () => {
+        handPoseDetector.recordGesture("drawn");
+    });
+    document.getElementById("recordFired").addEventListener("click", () => {
+        handPoseDetector.recordGesture("fired");
+    });
+    document.getElementById("download").addEventListener("click", () => {
+        handPoseDetector.downloadGestures();
+    });
 }
 
 main();

@@ -38,9 +38,9 @@ export default class HandPoseDetector {
         //start detection
         const startTimeMs = performance.now();
         this.results = this.handLandmarker.detectForVideo(this.videoElement, startTimeMs);
-        console.log(this.results);
 
         this.drawCanvas();
+        // console.log(this.results);
 
         // Call this function again to keep predicting when the browser is ready.
         window.requestAnimationFrame(() => {this.startPredicting()});
@@ -74,9 +74,10 @@ export default class HandPoseDetector {
         }
 
         if (this.results && this.results.landmarks && this.results.landmarks.length > 0) {
-            this.results.landmarks.forEach((landmark, index) => {
-                if (this.results.handedness[index] !== "Right") return;
-                this.gestures[gestureType].push(landmark);
+            this.results.handedness[0].forEach((hand, index) => {
+                if (hand.categoryName !== "Right") return;
+                console.log(this.results.landmarks[index]);
+                this.gestures[gestureType].push(this.results.landmarks[index]);
             });
         }
 

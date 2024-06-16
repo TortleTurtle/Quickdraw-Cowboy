@@ -1,3 +1,15 @@
+# Quickdraw Cowboy
+
+## Installation
+1. clone the git repo.
+2. `cd` into `/Game`
+3. run `npm install`
+4. run `npm run start`
+5. A new tab will open with Quickdraw Cowboy
+
+Instructions are the same for the model trainer.
+
+## Tests
 ### Confusion matrix & accuracy test 1
 - epochs: 50
 - batch size: 10

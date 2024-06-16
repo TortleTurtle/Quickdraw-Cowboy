@@ -1,18 +1,32 @@
+import ml5 from "ml5";
 
 export default class ModelTrainer {
     constructor() {
-        this.ml5 = null;
+        this.ml5 = ml5;
         this.testData = {};
         this.trainData = {};
+        this.options ={
+            inputs: 63, // 21 landmarks * 3 coordinates (x, y, z)
+            outputs: 3, // Number of labels
+            task: 'classification',
+            debug: true
+        }
     }
 
-    loadModel(){
+    async loadModel(){
+        this.model = ml5.neuralNetwork(this.options);
 
+        await this.model.load({
+            model: 'assets/model/model.json',
+            metadata: 'assets/model/model_meta.json',
+            weights: 'assets/model/model.weights.bin'
+        });
+        console.log("model loaded!");
     }
 
-    async loadTrainingData(){
+    async loadData(){
         try {
-            const trainingData = await fetch('./assets/train.json');
+            const trainingData = await fetch('./assets/training_data/1.json');
             const testingData = await fetch('./assets/test.json');
 
             if (!trainingData && !testingData) {
@@ -29,12 +43,92 @@ export default class ModelTrainer {
         }
 
     }
+    prepareDataset(data) {
+        //Prepare data
+        const dataset = [];
 
-    trainModel(){
-
+        for (const [label, samples] of Object.entries(data)) {
+            samples.forEach(sample => {
+                //create a big array containing all landmarks xyz values.
+                const inputs = sample.map(point => [point.x, point.y, point.z]).flat();
+                dataset.push({ inputs, label });
+            });
+        }
+        return dataset;
     }
 
-    testModel(){
+    async trainModel(){
+        if (!this.trainData) {
+            console.log("Training data not loaded!");
+            return;
+        }
 
+        const dataset = this.prepareDataset(this.trainData);
+        //Create model if not yet created;
+        if (!this.model) {
+            this.model = this.ml5.neuralNetwork(this.options);
+        }
+
+        dataset.forEach((data) => {
+            this.model.addData(data.inputs, [data.label]);
+        });
+
+        this.model.normalizeData();
+
+        const trainingOptions = {
+            epochs: 50,
+            batchSize: 5 //batch size 10 as we have 100 samples.
+        }
+        const whileTraining = (epoch, loss) => {
+            console.log(`Epoch: ${epoch} loss: ${loss.loss}`);
+        }
+
+        await this.model.train(trainingOptions, whileTraining);
+        this.model.save();
+    }
+
+    async testModel(){
+        if (!this.model) {
+            console.error("Model not loaded/trained yet!");
+            return;
+        }
+
+        // Prepare test data
+        const dataset = this.prepareDataset(this.testData);
+        console.log(dataset);
+        const labels = ["holstered", "drawn", "fired"]; //use this array to create 3x3 matrix.
+        //Create the matrix.
+        const confusionMatrix = Array.from({length: labels.length}, //Create an array with depth 3.
+            //on each position put an array with depth 3 and a value of 0.
+            () => Array(labels.length).fill(0));
+
+        let correct = 0;
+
+        console.log("Beginning test");
+
+        for (const data of dataset) {
+            console.log("testing");
+            const results = await this.model.classify(data.inputs);
+            const predictedLabel = results[0].label;
+
+            //get the index of the labels
+            const correctLabelIndex = labels.indexOf(data.label);
+            const predictedLabelIndex = labels.indexOf(predictedLabel);
+
+            /*increase the number on the position in the matrix.
+            * I.e. correct label is "holstered" so index 0
+            * predicted label is "fired" so index 2
+            * increment the 3rd number in the first array
+            * confusionMatrix[0][2]++;
+            */
+            confusionMatrix[correctLabelIndex][predictedLabelIndex]++;
+
+            if (predictedLabel === data.label) {
+                correct++;
+            }
+        }
+
+        console.log(`Accuracy: ${(correct / dataset.length) * 100}%`);
+        console.log(confusionMatrix);
     }
 }

@@ -2,7 +2,7 @@
 - epochs: 50
 - batch size: 10
 
-Accuracy: 70.33333333333334%
+Accuracy: 70.3%
 
 | Actual \ Predicted | Holstered | Drawn | Fired |
 |--------------------|-----------|-------|-------|
@@ -36,7 +36,7 @@ Drawn & fired are still being confused. Batch & epochs does not seem to affect t
 - batch size: 5
 - Thumb weight x2
 
-Accuracy: 66.66666666666666%
+Accuracy: 66.6%
 
 | Actual \ Predicted | Holstered | Drawn | Fired |
 |--------------------|-----------|-------|-------|
@@ -48,6 +48,7 @@ Accuracy: 66.66666666666666%
 Thumb weight increase seems to have no effect. Add more data?
 
 ### Confusion matrix & accuracy test 4
+- drawn & fired have 100 extra samples.
 - epochs: 50
 - batch size: 5
 - thumb weight: x10
@@ -63,3 +64,19 @@ Accuracy: 62%
 #### Conclusion
 Accuracy only drops, increasing weight is not an option.
 Choose a different 3rd pose?
+
+### Confusion matrix & accuracy test 5
+- new pose for fired.
+- epochs: 50
+- batch size: 5
+
+Accuracy: 100%
+
+| Actual \ Predicted | Holstered | Drawn | Fired |
+|--------------------|-----------|-------|-------|
+| Holstered          | 100       | 0     | 0     |
+| Drawn              | 0         | 100   | 0     |
+| Fired              | 0         | 0     | 100   |
+
+#### Conclusion
+Bullseye

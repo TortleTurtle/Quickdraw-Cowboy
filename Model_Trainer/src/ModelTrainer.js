@@ -26,8 +26,8 @@ export default class ModelTrainer {
 
     async loadData(){
         try {
-            const trainingData = await fetch('./assets/training_data/1.json');
-            const testingData = await fetch('./assets/test.json');
+            const trainingData = await fetch('./assets/training_data/3.json');
+            const testingData = await fetch('./assets/testing_data/2.json');
 
             if (!trainingData && !testingData) {
                 console.log("failed fetching train or test data");
@@ -88,6 +88,7 @@ export default class ModelTrainer {
         }
         const finishedTraining = () => {
             this.model.save();
+            this.testModel();
         }
 
         await this.model.train(trainingOptions, finishedTraining.bind(this));

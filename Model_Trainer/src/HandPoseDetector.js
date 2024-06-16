@@ -40,7 +40,7 @@ export default class HandPoseDetector {
         this.results = this.handLandmarker.detectForVideo(this.videoElement, startTimeMs);
 
         this.drawCanvas();
-        // console.log(this.results);
+        //console.log(this.results);
 
         // Call this function again to keep predicting when the browser is ready.
         window.requestAnimationFrame(() => {this.startPredicting()});

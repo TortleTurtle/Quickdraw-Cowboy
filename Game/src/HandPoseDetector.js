@@ -8,11 +8,6 @@ export default class HandPoseDetector {
         this.canvasCtx = canvasElement.getContext("2d");
         this.drawingUtils = new DrawingUtils(this.canvasCtx);
         this.handLandmarker = null;
-        this.gestures = {
-            holstered: [],
-            drawn: [],
-            fired: []
-        }
     }
 
     async loadHandLandmarker() {
@@ -34,16 +29,14 @@ export default class HandPoseDetector {
         }
     }
 
-    startPredicting() {
+    getHandPrediction() {
         //start detection
         const startTimeMs = performance.now();
         this.results = this.handLandmarker.detectForVideo(this.videoElement, startTimeMs);
 
         this.drawCanvas();
-        //console.log(this.results);
 
-        // Call this function again to keep predicting when the browser is ready.
-        window.requestAnimationFrame(() => {this.startPredicting()});
+        return this.results;
     }
 
     drawCanvas() {
@@ -62,35 +55,5 @@ export default class HandPoseDetector {
                 this.drawingUtils.drawLandmarks(landmarks, {color: "#FF0000", lineWidth: 2});
             }
         }
-    }
-
-    recordGesture(gestureType) {
-        console.log(`Now recording: ${gestureType}`);
-
-        //If 100 landmarks are recorded quit the function.
-        if (this.gestures[gestureType].length >= 100) {
-            console.log(`Finished recording: ${gestureType}`);
-            return
-        }
-
-        if (this.results && this.results.landmarks && this.results.landmarks.length > 0) {
-            this.results.handedness[0].forEach((hand, index) => {
-                if (hand.categoryName !== "Right") return;
-                this.gestures[gestureType].push(this.results.landmarks[index]);
-            });
-        }
-
-        //recursively call the function.
-        setTimeout(() => this.recordGesture(gestureType), 200);
-    }
-
-    downloadGestures() {
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.gestures, null, 2));
-        const downloadAnchorNode = document.createElement('a');
-        downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", "gestures.json");
-        document.body.appendChild(downloadAnchorNode); // Required for Firefox
-        downloadAnchorNode.click();
-        downloadAnchorNode.remove();
     }
 }

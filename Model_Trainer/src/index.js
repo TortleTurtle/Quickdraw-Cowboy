@@ -31,6 +31,8 @@ async function main() {
     await connectWebcam();
     //start prediction;
     handPoseDetector.startPredicting();
+
+    //create event listeners.
     document.getElementById("recordHolstered").addEventListener("click", () => {
         handPoseDetector.recordGesture("holstered");
     });
@@ -43,9 +45,18 @@ async function main() {
     document.getElementById("download").addEventListener("click", () => {
         handPoseDetector.downloadGestures();
     });
-    document.getElementById("loadData").addEventListener("click", () => {
-        modelTrainer.loadTrainingData();
+    document.getElementById("loadModel").addEventListener("click", () => {
+        modelTrainer.loadModel();
     })
+    document.getElementById("loadData").addEventListener("click", () => {
+        modelTrainer.loadData();
+    });
+    document.getElementById("trainModel").addEventListener("click", () => {
+        modelTrainer.trainModel();
+    });
+    document.getElementById("testModel").addEventListener("click", () => {
+        modelTrainer.testModel();
+    });
 }
 
 main();

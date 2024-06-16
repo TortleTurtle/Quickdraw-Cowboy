@@ -76,7 +76,6 @@ export default class HandPoseDetector {
         if (this.results && this.results.landmarks && this.results.landmarks.length > 0) {
             this.results.handedness[0].forEach((hand, index) => {
                 if (hand.categoryName !== "Right") return;
-                console.log(this.results.landmarks[index]);
                 this.gestures[gestureType].push(this.results.landmarks[index]);
             });
         }

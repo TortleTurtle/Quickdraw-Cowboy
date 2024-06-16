@@ -48,9 +48,16 @@ export default class ModelTrainer {
         const dataset = [];
 
         for (const [label, samples] of Object.entries(data)) {
-            samples.forEach(sample => {
+            samples.forEach((sample, index) => {
+                //increase weight for thumbs
+                // if (index === 1 || index === 2 || index === 3 || index === 4) {
+                //     sample[index].x *= 10;
+                //     sample[index].y *= 10;
+                //     sample[index].z *= 10;
+                // }
+
                 //create a big array containing all landmarks xyz values.
-                const inputs = sample.map(point => [point.x, point.y, point.z]).flat();
+                const inputs = sample.map(landmark => [landmark.x, landmark.y, landmark.z]).flat();
                 dataset.push({ inputs, label });
             });
         }
@@ -79,12 +86,11 @@ export default class ModelTrainer {
             epochs: 50,
             batchSize: 5 //batch size 10 as we have 100 samples.
         }
-        const whileTraining = (epoch, loss) => {
-            console.log(`Epoch: ${epoch} loss: ${loss.loss}`);
+        const finishedTraining = () => {
+            this.model.save();
         }
 
-        await this.model.train(trainingOptions, whileTraining);
-        this.model.save();
+        await this.model.train(trainingOptions, finishedTraining.bind(this));
     }
 
     async testModel(){

@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Quick-draw Cowboy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hepta+Slab:wght@1..900&family=Sancreek&display=swap" rel="stylesheet">
 </head>
 <body>
 <section id="instructions">
@@ -14,7 +17,7 @@
         <h2>How to play</h2>
         <div>
             <h3>1. Begin the game.</h3>
-            <img src="https://placehold.co/640x480" alt="holstered position">
+            <img src="./assets/images/Holstered.png" alt="holstered position">
             <p>
                 To start the game move your <strong>right</strong> hand to the holstered position.
                 This will start a random timer to test your reaction skills.
@@ -22,12 +25,12 @@
         </div>
         <div>
             <h3>2. Draw your revolver</h3>
-            <img src="https://placehold.co/640x480" alt="Drawn position">
-            <p>When the timer finishes, "DRAW" will appear. Draw your revolver as shown in the image above.</p>
+            <img src="./assets/images/Drawn.png" alt="Drawn position">
+            <p>When the bell tolls, draw your revolver as shown in the image above.</p>
         </div>
         <div>
             <h3>3. FIRE!</h3>
-            <img src="https://placehold.co/640x480" alt="Fired position">
+            <img src="./assets/images/Shoot.png" alt="Fired position">
             <p>
                 After drawing your revolver, FIRE! The game will show how long it took for you to draw and fire your gun.
                 To start again simply move your hand back to the 1st position.
@@ -39,8 +42,17 @@
         <span class="visually-hidden">Close</span>
     </button>
 </section>
-<div id="time"></div>
-<video id="inputVideo" autoplay playsinline></video>
-<canvas id="outputCanvas"></canvas>
+<main>
+    <div id="timer">0.000s</div>
+    <div id="webcam">
+        <video id="inputVideo" autoplay playsinline></video>
+        <canvas id="outputCanvas"></canvas>
+    </div>
+    <div id="gunRange">
+        <img id="targetImg" src="assets/images/Target.png" alt="shootingTarget">
+        <img id="impactImg" src="assets/images/gunshotImpact.png" alt="impact">
+        <img id="crosshairImg" src="assets/images/crosshair.png" alt="crosshair">
+    </div>
+</main>
 </body>
 </html>

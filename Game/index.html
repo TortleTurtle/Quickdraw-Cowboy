@@ -2,18 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Quickdraw Cowboy</title>
+    <title>Quick-draw Cowboy</title>
 </head>
 <body>
-<section>
-    <h1>Quickdraw Cowboy</h1>
+<section id="instructions">
+    <h1>Quick-draw Cowboy</h1>
     <p>
-        Are you the fastest draw on the web? Time yourself! To start simply put your hand by your holster!
-        When the bell tolls draw your pistol and fire! See how fast your reaction is!
-        P.S. Real cowboys shoot with their right hand.
+        Are you the fastest draw on the web? Find out with Quick-draw Cowboy and reenact the iconic duals from Westerns!
     </p>
-    <div id="time"></div>
+    <div id="howToPlay">
+        <h2>How to play</h2>
+        <div>
+            <h3>1. Begin the game.</h3>
+            <img src="https://placehold.co/640x480" alt="holstered position">
+            <p>
+                To start the game move your <strong>right</strong> hand to the holstered position.
+                This will start a random timer to test your reaction skills.
+            </p>
+        </div>
+        <div>
+            <h3>2. Draw your revolver</h3>
+            <img src="https://placehold.co/640x480" alt="Drawn position">
+            <p>When the timer finishes, "DRAW" will appear. Draw your revolver as shown in the image above.</p>
+        </div>
+        <div>
+            <h3>3. FIRE!</h3>
+            <img src="https://placehold.co/640x480" alt="Fired position">
+            <p>
+                After drawing your revolver, FIRE! The game will show how long it took for you to draw and fire your gun.
+                To start again simply move your hand back to the 1st position.
+            </p>
+        </div>
+    </div>
+    <button type="button" id="closeBtn" class="btn-close">
+        <span class="icon-cross"></span>
+        <span class="visually-hidden">Close</span>
+    </button>
 </section>
+<div id="time"></div>
 <video id="inputVideo" autoplay playsinline></video>
 <canvas id="outputCanvas"></canvas>
 </body>

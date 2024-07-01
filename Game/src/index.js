@@ -1,8 +1,11 @@
 import HandPoseDetector from "./HandPoseDetector";
 import GestureClassifier from "./GestureClassifier";
+import "./style.css";
 
 const videoElement = document.getElementById("inputVideo");
 const canvasElement = document.getElementById("outputCanvas");
+const instructions = document.getElementById("instructions");
+const closeBtn = document.getElementById("closeBtn");
 
 const handPoseDetector = new HandPoseDetector(videoElement, canvasElement);
 const gestureClassiffier = new GestureClassifier();
@@ -19,7 +22,10 @@ async function setup(){
     await handPoseDetector.loadHandLandmarker();
     await gestureClassiffier.loadModel();
 
-    loop();
+    closeBtn.addEventListener('click', () => {
+        instructions.style.display = "none";
+        loop();
+    });
 }
 
 async function loop() {
